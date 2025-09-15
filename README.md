@@ -36,23 +36,17 @@ Interfaz de usuario → Panel amigable y adaptado a la operación diaria de la d
 
 Tecnología:
 
-Lenguaje de programación: JavaScript con Node.js (Backend).
+BackEnd: Spring Boot (Java).
 
-Framework Backend: Express.js.
+Base de datos: MySQL.
 
-ORM: Sequelize (para facilitar el manejo de la base de datos sin escribir SQL directo).
+ORM: JPA (para facilitar el manejo de la base de datos sin escribir SQL directo).
 
 Control de versiones: GitHub.
 
-Framework de interfaz: React.js.
+FrontEnd: React.js.
 
 Seguridad: Autenticación con JWT, cifrado de contraseñas con bcrypt.
-
-Base de Datos:
-
-Node.js con Express.js y MySQL.
-
-ORM: Sequelize (para gestión de datos simplificada).
 
 Flujo de Sistema:
 
@@ -105,3 +99,4 @@ Vendedor: acceso limitado a registro de pedidos, ventas y gestión básica de cl
 Protección de datos sensibles: Cifrado de contraseñas con bcrypt y políticas de acceso a la base de datos con roles diferenciados.
 
 Alertas de seguridad: Registro de actividad de usuarios.
+
