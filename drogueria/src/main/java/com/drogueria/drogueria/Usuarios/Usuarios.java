@@ -36,6 +36,7 @@ public class Usuarios {
     private String telefono;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean activo = true;
 
     @Column(nullable = false, updatable = false)
