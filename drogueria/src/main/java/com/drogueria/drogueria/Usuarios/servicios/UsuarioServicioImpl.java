@@ -26,8 +26,8 @@ public class UsuarioServicioImpl implements  UsuarioServicio {
             throw new RuntimeException("Email ya existe");
         }
 
-        Roles rol = rolesRepositorio.findById(1L)
-                .orElseThrow(() -> new RuntimeException("Rol con id=1 no encontrado"));
+        Roles rol = rolesRepositorio.findById(2L)
+                .orElseThrow(() -> new RuntimeException("Rol con id=2 no encontrado"));
 
         String encoded = passwordEncoder.encode(dto.getPassword());
 
