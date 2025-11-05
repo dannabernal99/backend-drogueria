@@ -22,6 +22,11 @@ public class ProductoServicioImpl implements ProductoServicio {
     }
 
     @Override
+    public List<Producto> findAll() {
+        return productoRepositorio.findAll();
+    }
+
+    @Override
     public Producto save(Producto p) {
         return productoRepositorio.save(p);
     }
@@ -38,7 +43,8 @@ public class ProductoServicioImpl implements ProductoServicio {
                     producto.setNombre(p.getNombre());
                     producto.setPrecio(p.getPrecio());
                     producto.setCantidad(p.getCantidad());
-                    return producto;
+
+                    return productoRepositorio.save(producto);
                 })
                 .orElse(null);
     }
