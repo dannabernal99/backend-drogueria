@@ -20,6 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -28,6 +30,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final int BEARER_PREFIX_LENGTH = 7;
+
+    private static final List<String> PUBLIC_PATHS = Arrays.asList(
+            "/api/v1/auth/login",
+            "/api/v1/auth/register",
+            "/api/v1/auth/refresh",
+            "/api/v1/public/",
+            "/actuator/health",
+            "/swagger-ui",
+            "/v3/api-docs"
+    );
 
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
@@ -44,6 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
+        // Permitir peticiones OPTIONS (CORS preflight)
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             logger.debug("Petición OPTIONS detectada, permitiendo sin autenticación");
             filterChain.doFilter(request, response);
@@ -52,6 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader(AUTHORIZATION_HEADER);
 
+        // Si no hay header Authorization o no empieza con "Bearer ", continuar sin autenticar
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             logger.debug("No se encontró token JWT en la petición a: {}", request.getRequestURI());
             filterChain.doFilter(request, response);
@@ -60,7 +74,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(BEARER_PREFIX_LENGTH);
-
             final String username = jwtUtil.extractUsername(jwt);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -135,11 +148,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.startsWith("/api/v1/auth/login") ||
-                path.startsWith("/api/v1/auth/register") ||
-                path.startsWith("/actuator/health") ||
-                path.startsWith("/api/v1/public/");
+
+        logger.debug("Verificando si la ruta '{}' debe ser filtrada", path);
+
+        boolean shouldNotFilter = PUBLIC_PATHS.stream()
+                .anyMatch(path::startsWith);
+
+        if (shouldNotFilter) {
+            logger.debug("Ruta '{}' es pública, saltando filtro JWT", path);
+        }
+
+        return shouldNotFilter;
     }
 }
