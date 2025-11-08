@@ -5,8 +5,13 @@ import com.drogueria.drogueria.SecurityConfig.AuthResponse;
 import com.drogueria.drogueria.Usuarios.UsuariosCreateDTO;
 import com.drogueria.drogueria.Usuarios.UsuariosDTO;
 
+import java.util.List;
+
 public interface UsuarioServicio {
     UsuariosDTO crearUsuario(UsuariosCreateDTO dto);
-    AuthResponse authenticate(AuthRequest request);
+    UsuariosDTO actualizarUsuario(Long id, UsuariosDTO dto);
+    void eliminarUsuario(Long id);
     UsuariosDTO obtenerPorUsername(String username);
+    List<UsuariosDTO> obtenerTodosMenosActual(String usernameActual);
+    AuthResponse authenticate(AuthRequest request);
 }

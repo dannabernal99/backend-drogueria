@@ -13,4 +13,5 @@ public class UsuariosCreateDTO {
     private String email;
     private String nombreCompleto;
     private String telefono;
+    private String roleNombre;
 }
