@@ -56,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Permitir peticiones OPTIONS (CORS preflight)
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             logger.debug("Petición OPTIONS detectada, permitiendo sin autenticación");
             filterChain.doFilter(request, response);
@@ -65,7 +64,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader(AUTHORIZATION_HEADER);
 
-        // Si no hay header Authorization o no empieza con "Bearer ", continuar sin autenticar
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             logger.debug("No se encontró token JWT en la petición a: {}", request.getRequestURI());
             filterChain.doFilter(request, response);
