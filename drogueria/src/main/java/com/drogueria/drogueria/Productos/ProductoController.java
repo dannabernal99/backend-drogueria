@@ -19,18 +19,21 @@ public class ProductoController {
     }
 
     @PostMapping
-    public Producto save(@RequestBody Producto p){
-        return productoServicio.save(p);
+    public ResponseEntity<ProductoDTO> save(@RequestBody ProductoDTO dto){
+        ProductoDTO saved = productoServicio.save(dto);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping
-    public List<Producto> getAll() {
+    public List<ProductoDTO> getAll() {
         return productoServicio.findAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Producto> getById(@PathVariable Long id){
-        return productoServicio.findById(id);
+    public ResponseEntity<ProductoDTO> getById(@PathVariable Long id){
+        return productoServicio.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
@@ -39,12 +42,10 @@ public class ProductoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> update(@PathVariable Long id, @RequestBody Producto p){
-        p.setId(id);
-        Producto productoActualizado = productoServicio.update(p);
-
-        if (productoActualizado != null) {
-            return ResponseEntity.ok(productoActualizado);
+    public ResponseEntity<ProductoDTO> update(@PathVariable Long id, @RequestBody ProductoDTO dto){
+        ProductoDTO updated = productoServicio.update(id, dto);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
         } else {
             return ResponseEntity.notFound().build();
         }
