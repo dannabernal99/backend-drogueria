@@ -31,10 +31,14 @@ public class CompraServicioImpl implements CompraServicio {
 
     @Override
     @Transactional
-    public CompraDTO realizarCompra(Long usuarioId, CompraRequestDTO request) {
-        Usuarios usuario = usuarioRepositorio.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    public CompraDTO realizarCompraPorUsername(String username, CompraRequestDTO request) {
+        Usuarios usuario = usuarioRepositorio.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con username: " + username));
 
+        return procesarCompra(usuario, request);
+    }
+
+    private CompraDTO procesarCompra(Usuarios usuario, CompraRequestDTO request) {
         Producto producto = productoRepositorio.findById(request.getProductoId())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 

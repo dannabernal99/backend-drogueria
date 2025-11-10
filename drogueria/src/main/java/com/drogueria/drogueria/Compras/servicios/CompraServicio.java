@@ -6,7 +6,7 @@ import com.drogueria.drogueria.Compras.CompraRequestDTO;
 import java.util.List;
 
 public interface CompraServicio {
-    CompraDTO realizarCompra(Long usuarioId, CompraRequestDTO request);
+    CompraDTO realizarCompraPorUsername(String username, CompraRequestDTO request); // NUEVO
     List<CompraDTO> obtenerComprasPorUsuario(Long usuarioId);
     List<CompraDTO> obtenerTodasLasCompras();
 }

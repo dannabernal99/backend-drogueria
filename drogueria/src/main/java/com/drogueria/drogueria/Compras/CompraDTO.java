@@ -14,5 +14,5 @@ public class CompraDTO {
     private Integer cantidad;
     private Double precioUnitario;
     private Double precioTotal;
-    private LocalDateTime fechaCompra;
+    private String fechaCompra;
 }
