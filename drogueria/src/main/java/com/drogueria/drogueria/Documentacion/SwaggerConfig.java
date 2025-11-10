@@ -1,4 +1,4 @@
-package com.drogueria.drogueria.Documentation;
+package com.drogueria.drogueria.Documentacion;
 
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
