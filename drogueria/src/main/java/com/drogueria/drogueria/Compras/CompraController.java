@@ -1,14 +1,18 @@
 package com.drogueria.drogueria.Compras;
 
 import com.drogueria.drogueria.Compras.servicios.CompraServicio;
+import com.drogueria.drogueria.Exception.UsuarioNoEncontradoException;
 import com.drogueria.drogueria.SecurityConfig.JwtUtil;
 import com.drogueria.drogueria.Usuarios.UsuarioRepositorio;
 import com.drogueria.drogueria.Usuarios.Usuarios;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/compras")
@@ -28,16 +32,26 @@ public class CompraController {
     }
 
     @PostMapping("/realizar-compra")
-    public ResponseEntity<CompraDTO> realizarCompra(@RequestBody CompraRequestDTO request) {
+    public ResponseEntity<?> realizarCompra(@RequestBody CompraRequestDTO request) {
         try {
             if (request.getUsername() == null || request.getUsername().trim().isEmpty()) {
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity
+                        .badRequest()
+                        .body(createErrorResponse("El username es requerido"));
             }
 
             CompraDTO compra = compraServicio.realizarCompraPorUsername(request.getUsername(), request);
             return ResponseEntity.ok(compra);
+
+        } catch (UsuarioNoEncontradoException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(createErrorResponse("Usuario no encontrado: " + request.getUsername()));
+
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity
+                    .badRequest()
+                    .body(createErrorResponse(e.getMessage()));
         }
     }
 
@@ -69,4 +83,9 @@ public class CompraController {
             return ResponseEntity.badRequest().build();
         }
     }
-}
+
+    private Map<String, String> createErrorResponse(String message) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", message);
+        return error;
+    }}

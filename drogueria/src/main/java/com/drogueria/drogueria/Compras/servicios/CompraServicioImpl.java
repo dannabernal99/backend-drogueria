@@ -1,6 +1,7 @@
 package com.drogueria.drogueria.Compras.servicios;
 
 import com.drogueria.drogueria.Compras.*;
+import com.drogueria.drogueria.Exception.UsuarioNoEncontradoException;
 import com.drogueria.drogueria.Productos.Producto;
 import com.drogueria.drogueria.Productos.ProductoRepositorio;
 import com.drogueria.drogueria.Usuarios.UsuarioRepositorio;
@@ -33,7 +34,7 @@ public class CompraServicioImpl implements CompraServicio {
     @Transactional
     public CompraDTO realizarCompraPorUsername(String username, CompraRequestDTO request) {
         Usuarios usuario = usuarioRepositorio.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con username: " + username));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado con username: " + username));
 
         return procesarCompra(usuario, request);
     }
