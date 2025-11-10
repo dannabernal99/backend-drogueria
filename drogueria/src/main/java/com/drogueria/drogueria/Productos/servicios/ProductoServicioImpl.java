@@ -2,10 +2,7 @@ package com.drogueria.drogueria.Productos.servicios;
 
 import com.drogueria.drogueria.Categorias.Categoria;
 import com.drogueria.drogueria.Categorias.CategoriaRepositorio;
-import com.drogueria.drogueria.Productos.Producto;
-import com.drogueria.drogueria.Productos.ProductoDTO;
-import com.drogueria.drogueria.Productos.ProductoMapper;
-import com.drogueria.drogueria.Productos.ProductoRepositorio;
+import com.drogueria.drogueria.Productos.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,6 +48,14 @@ public class ProductoServicioImpl implements ProductoServicio {
         Producto producto = productoMapper.toEntity(dto, categoria);
         Producto saved = productoRepositorio.save(producto);
         return productoMapper.toDTO(saved);
+    }
+
+    @Override
+    public List<ProductoCategoriaDTO> findAllWithCategoria() {
+        return productoRepositorio.findAll()
+                .stream()
+                .map(productoMapper::toProductoCategoriaDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

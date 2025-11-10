@@ -41,6 +41,11 @@ public class ProductoController {
         productoServicio.deleteById(id);
     }
 
+    @GetMapping("/catalogo")
+    public List<ProductoCategoriaDTO> getCatalogo() {
+        return productoServicio.findAllWithCategoria();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ProductoDTO> update(@PathVariable Long id, @RequestBody ProductoDTO dto){
         ProductoDTO updated = productoServicio.update(id, dto);

@@ -23,6 +23,24 @@ public class ProductoMapper {
         return dto;
     }
 
+    public ProductoCategoriaDTO toProductoCategoriaDTO(Producto producto) {
+        if (producto == null) return null;
+
+        ProductoCategoriaDTO dto = new ProductoCategoriaDTO();
+        dto.setId(producto.getId());
+        dto.setNombre(producto.getNombre());
+        dto.setPrecio(producto.getPrecio());
+        dto.setCantidad(producto.getCantidad());
+
+        if (producto.getCategoria() != null) {
+            dto.setCategoriaId(producto.getCategoria().getId());
+            dto.setCategoriaNombre(producto.getCategoria().getNombre());
+            dto.setCategoriaDescripcion(producto.getCategoria().getDescripcion());
+        }
+
+        return dto;
+    }
+
     public Producto toEntity(ProductoDTO dto, Categoria categoria) {
         if (dto == null) return null;
 
